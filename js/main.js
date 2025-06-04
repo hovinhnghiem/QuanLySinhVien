@@ -63,6 +63,53 @@ const renderStaffList = (data) => {
     }
     getEle("tableDanhSach").innerHTML = contentHTML;
 };
+
+/**
+ * clear data form
+ */
+const resetForm = () => {
+  getEle("staffForm").reset();
+};
+
+/**
+ * Click thêm nhân viên => Hiển thị modal => Cập nhật ẩn
+ */
+getEle("btnThem").onclick = function () {
+  // Ẩn nút cập nhật
+  getEle("btnCapNhat").style.display = "none";
+
+  // Hiển thị tiêu đề modal
+  getEle("header-title").innerHTML = "Thêm Nhân Viên";
+
+  // Hiển thị nút Thêm
+  getEle("btnThem").style.display = "block";
+
+  // enable tknv
+  getEle("tknv").disabled = false;
+
+  //Clear Form
+  resetForm();
+};
+
+/**
+ * Cập Nhật Nhân Viên
+ */
+getEle("btnCapNhat").onclick = function () {
+  // Gọi phương thức addStaff() để thêm viên vào danh sách
+  const staff = getValueStaff();
+
+  // Cập nhật thông tin món ăn
+  staffList.updateStaff(staff);
+
+  // close Modal
+  document.getElementsByClassName("btn close")[0].click();
+
+  // Render lai ds
+  renderStaffList(staffList.arr);
+
+  // Lưu data mới xuống localStorage
+  setLocalStorage(staffList.arr);
+};
 /**
  * Hàm xử lý sự kiện sửa thông tin nhân viên
  */
@@ -90,9 +137,6 @@ const onEditStaff = (tknv) => {
         getEle("chucvu").value = staff.chucvu;
         getEle("gioLam").value = staff.gioLam;
     }
-    staffList.updateStaff(tknv);
-    renderStaffList(staffList.arr);
-    setLocalStorage(staffList.arr);
 };
 // Make onEditStaff globally accessible
 window.onEditStaff = onEditStaff;
@@ -174,6 +218,6 @@ getEle("btnThemNV").onclick = function () {
     setLocalStorage(staffList.arr);
 
     //   close modal
-    //document.getElementsByClassName("close")[0].click();
+    // document.getElementsByClassName("close")[0].click();
 };
 
