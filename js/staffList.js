@@ -42,7 +42,56 @@ class StaffList {
             this.arr[index] = staff;
         }
     }
-    filterStaff() { }
+    filterStaff(typeStaff) {
+    /**
+     *  0. Tạo ra mảng filter = [];
+        1. Duyệt qua mảng arr
+            1.1 lấy food = arr[i]
+            1.2 Kiểm tra food.type trùng với type
+                => true => Thêm food tìm thấy vào mảng filter
+        2. trả mảng filter
+     */
+    const type = typeStaff();
+    if (type === "all") {
+      return this.arr;
+    }
+
+    let arrFiltered = [];
+    for (let i = 0; i < this.arr.length; i++) {
+      const staff = this.arr[i];
+      if (staff.type === type) {
+        arrFiltered.push(staff);
+      }
+    }
+    return arrFiltered;
+  }
+    searchStaff(searchName) {
+    /**
+     *  0. Tạo ra mảng findStaffs = [];
+        1. Duyệt qua mảng arr
+          1.1 lấy staff = arr[i]
+          1.2 Kiểm tra staff.name trùng với keyword
+          => true => Thêm staff tìm thấy vào mảng findstaffs
+
+        2. trả mảng findstaffs
+     */
+    let findStaffs = [];
+
+    for (let i = 0; i < this.arr.length; i++) {
+      const staff = this.arr[i];
+      // Chuyển staff.name thành chữ viết thường
+      const nameLowerCase = staff.nameNV.toLowerCase();
+      // Chuyển searchName thành chữ viết thường
+      const keywordLowerCase = searchName.toLowerCase();
+
+      const index = nameLowerCase.indexOf(keywordLowerCase);
+      if (index !== -1) {
+        findStaffs.push(staff);
+      }
+    }
+
+      return findStaffs;
+    }
 }
 
 export default StaffList;

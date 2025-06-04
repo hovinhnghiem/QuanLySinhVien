@@ -19,6 +19,184 @@ const getValueStaff = () => {
     const chucvu = getEle("chucvu").value;
     const gioLam = getEle("gioLam").value;
 
+    // tạo flag (cờ)
+let isValid = true;
+
+// Lấy giá trị và loại bỏ khoảng trắng
+const tknvValue = tknv.trim();
+const nameValue = nameNV.trim();  // nameNV là giá trị từ getEle("nameNV").value
+
+/**
+ * Validation TKNV
+ */
+// 1. Không để trống Tài khoản nhân viên
+if (tknvValue === "") {
+  getEle("tbTKNV").innerText = "(*) Vui lòng nhập TKNV";
+  getEle("tbTKNV").style.display = "block";
+  isValid = false;
+}
+// 2. Phải là 4–6 ký số
+else if (!/^\d{4,6}$/.test(tknvValue)) {
+  getEle("tbTKNV").innerText = "(*) TKNV phải gồm 4–6 chữ số";
+  getEle("tbTKNV").style.display = "block";
+  isValid = false;
+}
+// 3. Hợp lệ
+else {
+  getEle("tbTKNV").innerText = "";
+  getEle("tbTKNV").style.display = "none";
+}
+
+// Nếu TKNV không hợp lệ -> dừng luôn
+if (!isValid) return;
+
+/**
+ * Validation Tên nhân viên
+ */
+// 1. Không để trống tên
+if (nameValue === "") {
+  getEle("tbTen").innerText = "(*) Vui lòng nhập tên nhân viên";
+  getEle("tbTen").style.display = "block";
+  isValid = false;
+}
+// 2. Chỉ chứa chữ cái và khoảng trắng
+else if (!/^[A-Za-zÀ-ỹ\s]+$/.test(nameValue)) {
+  getEle("tbTen").innerText = "(*) Tên nhân viên phải là chữ";
+  getEle("tbTen").style.display = "block";
+  isValid = false;
+}
+// 3. Hợp lệ
+else {
+  getEle("tbTen").innerText = "";
+  getEle("tbTen").style.display = "none";
+}
+
+// Nếu tên không hợp lệ -> dừng luôn
+if (!isValid) return;
+
+// Lấy giá trị và trim khoảng trắng
+const emailValue = getEle("email").value.trim();
+
+// Validation Email
+// 1. Không để trống email
+if (emailValue === "") {
+  getEle("tbEmail").innerText = "(*) Vui lòng nhập email";
+  getEle("tbEmail").style.display = "block";
+  isValid = false;
+}
+// 2. Phải đúng định dạng email
+else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue)) {
+  getEle("tbEmail").innerText = "(*) Email không đúng định dạng";
+  getEle("tbEmail").style.display = "block";
+  isValid = false;
+}
+// 3. Hợp lệ
+else {
+  getEle("tbEmail").innerText = "";
+  getEle("tbEmail").style.display = "none";
+}
+
+// Nếu email không hợp lệ -> dừng luôn
+if (!isValid) return;
+
+// Lấy giá trị mật khẩu và trim khoảng trắng
+const passwordValue = getEle("password").value.trim();
+
+/**
+ * Validation Mật khẩu
+ */
+// 1. Không để trống mật khẩu
+if (passwordValue === "") {
+  getEle("tbMatKhau").innerText = "(*) Vui lòng nhập mật khẩu";
+  getEle("tbMatKhau").style.display = "block";
+  isValid = false;
+}
+// 2. Độ dài 6–10 ký tự, chứa ít nhất 1 số, 1 chữ in hoa và 1 ký tự đặc biệt
+else if (!/^(?=.*\d)(?=.*[A-Z])(?=.*[^A-Za-z0-9]).{6,20}$/.test(passwordValue)) {
+  getEle("tbMatKhau").innerText = "(*) Mật khẩu phải 6–10 ký tự, có ít nhất 1 số, 1 chữ in hoa và 1 ký tự đặc biệt";
+  getEle("tbMatKhau").style.display = "block";
+  isValid = false;
+}
+// 3. Hợp lệ
+else {
+  getEle("tbMatKhau").innerText = "";
+  getEle("tbMatKhau").style.display = "none";
+}
+
+// Nếu có lỗi -> dừng luôn
+if (!isValid) return;
+
+// 1. Validation Ngày làm (ngày sinh hoặc ngày ký hợp đồng) – không để trống, định dạng mm/dd/yyyy
+const dateValue = getEle("datepicker").value.trim();
+if (dateValue === "") {
+  getEle("tbNgay").innerText = "(*) Vui lòng nhập ngày";
+  getEle("tbNgay").style.display = "block";
+  isValid = false;
+} else if (!/^(0[1-9]|1[0-2])\/(0[1-9]|[12]\d|3[01])\/\d{4}$/.test(dateValue)) {
+  getEle("tbNgay").innerText = "(*) Định dạng ngày phải là mm/dd/yyyy";
+  getEle("tbNgay").style.display = "block";
+  isValid = false;
+} else {
+  getEle("tbNgay").innerText = "";
+  getEle("tbNgay").style.display = "none";
+}
+
+// 2. Validation Lương cơ bản – không để trống, trong khoảng 1 000 000 – 20 000 000
+const luongValue = getEle("luongCB").value.trim();
+if (luongValue === "") {
+  getEle("tbLuongCB").innerText = "(*) Vui lòng nhập lương cơ bản";
+  getEle("tbLuongCB").style.display = "block";
+  isValid = false;
+} else {
+  const luongNum = Number(luongValue);
+  if (isNaN(luongNum) || luongNum < 1000000 || luongNum > 20000000) {
+    getEle("tbLuongCB").innerText = "(*) Lương phải từ 1 000 000 đến 20 000 000";
+    getEle("tbLuongCB").style.display = "block";
+    isValid = false;
+  } else {
+    getEle("tbLuongCB").innerText = "";
+    getEle("tbLuongCB").style.display = "none";
+  }
+}
+
+// 3. Validation Chức vụ – phải chọn 1 trong 3 giá trị hợp lệ: "3", "2", "1"
+const chucvuValue = getEle("chucvu").value.trim();
+if (chucvuValue === "") {
+  getEle("tbChucVu").innerText = "(*) Vui lòng chọn chức vụ";
+  getEle("tbChucVu").style.display = "block";
+  isValid = false;
+} else if (!["Sep", "TruongPhong", "NhanVien"].includes(chucvuValue)) {
+  getEle("tbChucVu").innerText = "(*) Chức vụ không hợp lệ";
+  getEle("tbChucVu").style.display = "block";
+  isValid = false;
+} else {
+  getEle("tbChucVu").innerText = "";
+  getEle("tbChucVu").style.display = "none";
+}
+
+// 4. Validation Số giờ làm – không để trống, phải từ 80 đến 200
+const gioLamValue = getEle("gioLam").value.trim();
+if (gioLamValue === "") {
+  getEle("tbGiolam").innerText = "(*) Vui lòng nhập số giờ làm";
+  getEle("tbGiolam").style.display = "block";
+  isValid = false;
+} else {
+  const gioLamNum = Number(gioLamValue);
+  if (isNaN(gioLamNum) || gioLamNum < 80 || gioLamNum > 200) {
+    getEle("tbGiolam").innerText = "(*) Số giờ làm phải từ 80 đến 200 giờ";
+    getEle("tbGiolam").style.display = "block";
+    isValid = false;
+  } else {
+    getEle("tbGiolam").innerText = "";
+    getEle("tbGiolam").style.display = "none";
+  }
+}
+
+// Nếu bất kỳ validation nào thất bại, dừng luôn
+if (!isValid) return;
+
+
+
     //Tạo đối tượng staff từ lớp đối tượng Staff
     const staff = new Staff(tknv, nameNV, email, password, datepicker, luongCB, chucvu, gioLam);
     staff.calcSalStaff();
@@ -26,8 +204,11 @@ const getValueStaff = () => {
     return staff;
 }
 
+
 // Example usage toc avoid unused function error
 getValueStaff();
+
+
 
 const renderStaffList = (data) => {
     //Render danh sach nhan vien hien thi ra giao dien
@@ -68,47 +249,47 @@ const renderStaffList = (data) => {
  * clear data form
  */
 const resetForm = () => {
-  getEle("staffForm").reset();
+    getEle("staffForm").reset();
 };
 
 /**
  * Click thêm nhân viên => Hiển thị modal => Cập nhật ẩn
  */
 getEle("btnThem").onclick = function () {
-  // Ẩn nút cập nhật
-  getEle("btnCapNhat").style.display = "none";
+    // Ẩn nút cập nhật
+    getEle("btnCapNhat").style.display = "none";
 
-  // Hiển thị tiêu đề modal
-  getEle("header-title").innerHTML = "Thêm Nhân Viên";
+    // Hiển thị tiêu đề modal
+    getEle("header-title").innerHTML = "Thêm Nhân Viên";
 
-  // Hiển thị nút Thêm
-  getEle("btnThem").style.display = "block";
+    // Hiển thị nút Thêm
+    getEle("btnThem").style.display = "block";
 
-  // enable tknv
-  getEle("tknv").disabled = false;
+    // enable tknv
+    getEle("tknv").disabled = false;
 
-  //Clear Form
-  resetForm();
+    //Clear Form
+    resetForm();
 };
 
 /**
  * Cập Nhật Nhân Viên
  */
 getEle("btnCapNhat").onclick = function () {
-  // Gọi phương thức addStaff() để thêm viên vào danh sách
-  const staff = getValueStaff();
+    // Gọi phương thức addStaff() để thêm viên vào danh sách
+    const staff = getValueStaff();
 
-  // Cập nhật thông tin món ăn
-  staffList.updateStaff(staff);
+    // Cập nhật thông tin món ăn
+    staffList.updateStaff(staff);
 
-  // close Modal
-  document.getElementsByClassName("btn close")[0].click();
+    // close Modal
+    document.getElementsByClassName("btn close")[0].click();
 
-  // Render lai ds
-  renderStaffList(staffList.arr);
+    // Render lai ds
+    renderStaffList(staffList.arr);
 
-  // Lưu data mới xuống localStorage
-  setLocalStorage(staffList.arr);
+    // Lưu data mới xuống localStorage
+    setLocalStorage(staffList.arr);
 };
 /**
  * Hàm xử lý sự kiện sửa thông tin nhân viên
@@ -220,4 +401,34 @@ getEle("btnThemNV").onclick = function () {
     //   close modal
     // document.getElementsByClassName("close")[0].click();
 };
+
+/**
+ * Filter nhân viên
+getEle("selLoai").addEventListener("change", () => {
+  const type = getEle("selLoai").value;
+
+  // Gọi tới phương thức filterStaff(type)
+  const arrFiltered = typeof staffList.filterStaff === "function"
+    ? staffList.filterStaff(type)
+    : staffList.arr.filter(staff => {
+        if (type === "all" || !type) return true;
+        return typeof staff.typeStaff === "function" && staff.typeStaff() === type;
+      });
+
+  // render list
+  renderStaffList(arrFiltered);
+});
+ */
+
+
+/**
+ * Tìm kiếm nhân viên
+ */
+getEle("searchName").addEventListener("keyup", () => {
+  const searchName = getEle("searchName").value;
+
+  const findStaffs = staffList.searchStaff(searchName);
+
+  renderStaffList(findStaffs);
+});
 
